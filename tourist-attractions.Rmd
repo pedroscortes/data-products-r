@@ -1,0 +1,28 @@
+---
+title: "Developing Data Products Week 2"
+author: "Pedro Cortes dos Santos"
+date: "20/02/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Summary
+
+This project was created as part of the Developing Data Products course of the Coursera Data Science Specialization.
+
+The goal of the project is to create a web page using R Markdown that features a map created with Leaflet, and to host the resulting web page on either GitHub Pages, RPubs, or NeoCities.
+
+## International Famous Tourist Attractions
+
+```{r pressure, echo=TRUE}
+library(leaflet)
+
+df <- data.frame(lat = c(-23.561496,-22.951916,38.897685,51.501384,48.858398,40.431940), lng = c(-46.655939,-43.210466,-77.036530,-0.141879,2.294481,116.570364), popup = c("Museu de Artes de São Paulo", "Cristo Redentor", "Casa Branca", "Palácio de Buckingham", "Torre Eiffel", "Muralha da China"))
+df %>%
+        leaflet() %>%
+        addTiles() %>%
+        addMarkers(popup = df$popup)
+```
