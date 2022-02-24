@@ -1,0 +1,54 @@
+---
+title: "R Markdown Presentation & Plotly"
+author: "Pedro Cortes dos Santos"
+date: "23/02/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Summary
+
+This project was created as part of the Developing Data Products course of the Coursera Data Science Specialization.
+
+The goal of the project is to create  a web page presentation using R Markdown that features a plot created with Plotly. The webpage must contain the date that you created the document, and it must contain a plot created with Plotly.
+
+## Heatmap - Daily Ozone Levels in New York
+
+```{r, echo=TRUE}
+library(datasets)
+library(plotly)
+library(reshape2)
+data("airquality")  
+
+airquality$Month = as.factor(airquality$Month)  
+ozone_daily = airquality[, c(1, 5, 6)]  
+
+ozone_daily = dcast(ozone_daily, Day ~ Month, value.var = "Ozone")
+ozone_daily = as.matrix(ozone_daily[, -1])
+colnames(ozone_daily) = c("May", "June", "July", "August", "September")
+
+plot_ly(z = ozone_daily, colorscale = "Hot", x = colnames(ozone_daily), 
+    type = "heatmap", colorbar = list(title = "Ozone Levels (parts per billion)")) %>% 
+    layout(title = "Daily Ozone Levels in New York, May to September 1973", 
+        xaxis = list(title = "Month"), yaxis = list(title = "Day"))
+```
+
+## Scatterplot - EuStockMarkets Daily Closing Price
+
+```{r, echo=TRUE}
+library(plotly)
+data("EuStockMarkets")
+df <- as.data.frame(EuStockMarkets)
+df$time = 1:dim(df)[1]
+xlab <- list(title = 'Time (Number of Days)')
+ylab <- list(title = 'Closing Price')
+plot_ly(data = df, x = ~time, y = ~DAX,
+             type = 'scatter', mode = 'markers', name = 'DAX') %>%
+    add_trace(y = ~SMI, type = 'scatter', mode = 'markers', name = 'SMI') %>%
+    add_trace(y = ~CAC, type = 'scatter', mode = 'markers', name = 'CAC') %>%
+    add_trace(y = ~FTSE, type = 'scatter', mode = 'markers', name = 'FTSE') %>%
+    layout(xaxis = xlab, yaxis = ylab)
+```
